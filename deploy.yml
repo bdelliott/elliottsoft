@@ -1,0 +1,20 @@
+---
+
+# Deploy to elliottsoft website
+- hosts: padrigo
+  become: yes
+  vars:
+    - docroot: /var/www/html
+  tasks:
+    - name: install nginx
+      apt: name=nginx
+
+    - name: remove default home page
+      file:
+        path="{{ docroot }}/index.nginx-debian.html"
+        state=absent
+
+    - name: sync main website content
+      synchronize:
+        src: assets/
+        dest: "{{ docroot }}"
